@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'monitoring.apps.MonitoringConfig',
+    'rest_framework',
+
 ]
 
 MIDDLEWARE = [
@@ -48,6 +51,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'monitoring.middleware.CustomLogMiddleware'
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -123,3 +128,19 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+LOGGING ={
+    'version':1,
+    'loggers':{
+        'django':{
+            'handlers':['console'],
+            'level':'INFO'
+        }
+    },
+    'handlers':{
+        'console': {
+            "class": "logging.StreamHandler",
+        },
+    },
+
+}
