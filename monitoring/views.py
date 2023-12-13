@@ -9,6 +9,8 @@ from rest_framework.views import APIView
 from monitoring.models import LogEntry
 from monitoring.pagination import CustomPagination
 from monitoring.serializers import LogListSerializer, MethodCountSerializer
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample, extend_schema_view
+from drf_spectacular.types import OpenApiTypes
 
 
 # Log endpoints
@@ -25,7 +27,14 @@ class LogListView(generics.ListAPIView):
     pagination_class = CustomPagination
 
 
-
+@extend_schema_view(
+    get=extend_schema(
+        parameters=[
+            OpenApiParameter(name='number', description='get number of month or day', type=str),
+            OpenApiParameter(name='time', description='get monthly or daily', type=str),
+        ]
+    )
+)
 class DynamicLogListView(APIView):
     '''
     List of the number of methods dynamically by month or day for charts

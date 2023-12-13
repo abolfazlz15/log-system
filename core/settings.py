@@ -29,6 +29,7 @@ INSTALLED_APPS = [
 
     'monitoring.apps.MonitoringConfig',
     'rest_framework',
+    'drf_spectacular',
 
 ]
 
@@ -118,6 +119,11 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+REST_FRAMEWORK = {
+    # YOUR SETTINGS
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
 # LOGGING ={
 #     'version':1,
 #     'loggers':{
@@ -143,3 +149,11 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 
 EMAIL_SUPPORT = config('EMAIL_SUPPORT')
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Your Project API',
+    'DESCRIPTION': 'Your project description',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}
