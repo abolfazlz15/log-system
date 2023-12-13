@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from monitoring.models import LogEntry
+from monitoring.pagination import CustomPagination
 from monitoring.serializers import LogListSerializer, MethodCountSerializer
 
 
@@ -21,6 +22,8 @@ class LogListView(generics.ListAPIView):
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['user', 'status', 'method']
     ordering_fields = ['user', 'status', 'method']
+    pagination_class = CustomPagination
+
 
 
 class DynamicLogListView(APIView):
