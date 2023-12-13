@@ -1,11 +1,12 @@
-from django.shortcuts import render
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import generics
-from monitoring.models import LogEntry
-from rest_framework import filters
 from datetime import datetime, timedelta
+
 from django.db.models import Count
+from django.shortcuts import render
+from rest_framework import filters, generics
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from monitoring.models import LogEntry
 from monitoring.serializers import LogListSerializer, MethodCountSerializer
 
 
@@ -53,15 +54,21 @@ class DynamicLogListView(APIView):
 
 #
 class InfoTestView(APIView):
+    '''end point for test IMFO log level'''
+
     def get(self, request):
         return Response({'log level': 'INFO'}, status=200)
     
 
 class WarningTestView(APIView):
+    '''end point for test WARNING log level'''
+
     def get(self, request):
         return Response({'log level': 'WARNING'}, status=404)
     
 
 class ErrorTestView(APIView):
+    '''end point for test ERROR log level'''
+
     def get(self, request):
         return Response({'log level': 'ERROR'}, status=500)

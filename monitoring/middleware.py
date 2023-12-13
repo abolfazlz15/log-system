@@ -18,6 +18,7 @@ class CustomLogMiddleware:
         return response
 
     def process_response(self, request, response):
+        '''handle log settings and log management'''
         status_code = response.status_code
         log_controller_instance = LogController.objects.filter(is_active=True).first()
 
@@ -34,13 +35,14 @@ class CustomLogMiddleware:
                 logger.error(f'ERROR: {log_entry}')
 
     def get_module_name(self, request):
-
+        '''get module name for logging'''
         frame = inspect.stack()[2]
         module = inspect.getmodule(frame[0])
         module_name = module.__name__.split('.')[0] if module else 'UnknownModule'
         return module_name
 
     def save_log(self, request, status_code):
+        '''save log management'''
         user = request.user.username if request.user.is_authenticated else 'Anonymous'
         date_time = datetime.datetime.now()
         method = request.method

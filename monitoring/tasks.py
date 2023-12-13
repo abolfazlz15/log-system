@@ -4,6 +4,7 @@ from core.settings import EMAIL_HOST_USER, EMAIL_SUPPORT
 
 @shared_task
 def send_error_email(log_data):
+    '''celery task to send ERROR log level email'''
     subject = 'Error Notification'
     message = f'An error occurred:\n\n{log_data}'
     from_email = EMAIL_HOST_USER
