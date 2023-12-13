@@ -4,11 +4,17 @@ from rest_framework.response import Response
 from rest_framework import generics
 from monitoring.models import LogEntry
 from rest_framework import filters
+from datetime import datetime, timedelta
+from django.db.models import Count
+from monitoring.serializers import LogListSerializer, MethodCountSerializer
 
-from monitoring.serializers import LogListSerializer
 
-
+# Log endpoints
 class LogListView(generics.ListAPIView):
+    '''
+    List log endpoint with filter
+    path: /log/log-list?ordering=-user&search=404
+    '''
     serializer_class = LogListSerializer
     queryset = LogEntry.objects.all()
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
@@ -16,7 +22,36 @@ class LogListView(generics.ListAPIView):
     ordering_fields = ['user', 'status', 'method']
 
 
+class DynamicLogListView(APIView):
+    '''
+    List of the number of methods dynamically by month or day for charts
+    path example: /log/list-log-chart?time=-monthly&number=1
+    output: get=50, post=10 . . .
+    '''
+    def get(self, request):
+        # Get query parameters
+        time_filter = request.query_params.get('time', None)
+        number = request.query_params.get('number', 1)
 
+        if time_filter == 'daily':
+            time_ago = datetime.now() - timedelta(days=int(number))
+        elif time_filter == 'monthly':
+            time_ago = datetime.now() - timedelta(weeks=int(number) * 4)  
+        else:
+            return Response({'error': 'Invalid time parameter use this ?time=daily or monthly&number=integer'})
+
+        # Query to get the count of each method in the specified time range
+        method_counts = LogEntry.objects.filter(
+            date_time__gte=time_ago
+        ).values('method').annotate(count=Count('method'))
+
+        # Serialize the data
+        serializer = MethodCountSerializer(method_counts, many=True)
+
+        return Response(serializer.data)
+
+
+# 
 class TestView(APIView):
     def get(self, request):
-        return Response({'message': 'test'})
+        return Response({'message': 'test'}, status=200)
