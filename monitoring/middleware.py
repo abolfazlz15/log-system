@@ -19,20 +19,22 @@ class CustomLogMiddleware:
 
     def process_response(self, request, response):
         status_code = response.status_code
-        log_controller_instance = LogController.objects.first()
-        status_code_list = log_controller_instance.status_codes.values_list('status_code', flat=True)
+        log_controller_instance = LogController.objects.filter(is_active=True).first()
 
-        if status_code < 400 and 200 in status_code_list or 300 in status_code_list:
-            log_entry = self.save_log(request, status_code)
-            logger.info(f'INFO: {log_entry}')
-        elif status_code > 399 and status_code < 500 and 400 in status_code_list:
-            log_entry = self.save_log(request, status_code)
-            logger.warning(f'WARNING: {log_entry}')
-        elif 500 in status_code_list: 
-            log_entry = self.save_log(request, status_code)
-            logger.error(f'ERROR: {log_entry}')
+        if log_controller_instance:
+            status_code_list = log_controller_instance.status_codes.values_list('status_code', flat=True)
+            if status_code < 400 and 200 in status_code_list or 300 in status_code_list:
+                log_entry = self.save_log(request, status_code)
+                logger.info(f'INFO: {log_entry}')
+            elif status_code > 399 and status_code < 500 and 400 in status_code_list:
+                log_entry = self.save_log(request, status_code)
+                logger.warning(f'ERROR: {log_entry}')
+            elif 500 in status_code_list: 
+                log_entry = self.save_log(request, status_code)
+                logger.error(f'ERROR: {log_entry}')
 
     def get_module_name(self, request):
+
         frame = inspect.stack()[2]
         module = inspect.getmodule(frame[0])
         module_name = module.__name__.split('.')[0] if module else 'UnknownModule'
