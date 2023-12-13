@@ -1,7 +1,11 @@
 from django.db import models
 
-# models.py
-from django.db import models
+
+class StatusCodeList(models.Model):
+    status_code = models.PositiveSmallIntegerField()
+
+    def __str__(self):
+        return str(self.status_code)
 
 class LogEntry(models.Model):
     status = models.IntegerField(null=True)
@@ -13,3 +17,10 @@ class LogEntry(models.Model):
 
     def __str__(self):
         return f"{self.date_time} - {self.user} - {self.method} - {self.status}"
+
+
+class LogController(models.Model):
+    is_active = models.BooleanField(default=True)
+    status_codes = models.ManyToManyField(StatusCodeList, related_name='log_controller', blank=True)
+
+
