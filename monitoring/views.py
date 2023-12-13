@@ -51,7 +51,17 @@ class DynamicLogListView(APIView):
         return Response(serializer.data)
 
 
-# 
-class TestView(APIView):
+#
+class InfoTestView(APIView):
     def get(self, request):
-        return Response({'message': 'test'}, status=200)
+        return Response({'log level': 'INFO'}, status=200)
+    
+
+class WarningTestView(APIView):
+    def get(self, request):
+        return Response({'log level': 'WARNING'}, status=404)
+    
+
+class ErrorTestView(APIView):
+    def get(self, request):
+        return Response({'log level': 'ERROR'}, status=500)

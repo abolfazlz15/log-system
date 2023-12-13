@@ -28,7 +28,7 @@ class CustomLogMiddleware:
                 logger.info(f'INFO: {log_entry}')
             elif status_code > 399 and status_code < 500 and 400 in status_code_list:
                 log_entry = self.save_log(request, status_code)
-                logger.warning(f'ERROR: {log_entry}')
+                logger.warning(f'WARNING: {log_entry}')
             elif 500 in status_code_list: 
                 log_entry = self.save_log(request, status_code)
                 logger.error(f'ERROR: {log_entry}')

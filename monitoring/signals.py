@@ -9,5 +9,5 @@ from monitoring.tasks import send_error_email
 def  notification_handler_signal(sender, instance, created, *args, **kwargs):
     if created:
         data = f'{instance.date_time} {instance.user} {instance.method} {instance.status}'
-        if instance.status > 300:
+        if instance.status > 499:
             send_error_email.delay(data)
