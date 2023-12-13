@@ -10,7 +10,7 @@ celery_app.config_from_object('django.conf:settings', namespace='CELERY')
 
 celery_app.autodiscover_tasks()
 
-celery_app.conf.broker_url = 'amqp://guest:guest@localhost:5672/'
+celery_app.conf.broker_url = 'amqp://guest:guest@localhost:5672/' # for normal usage (without docker ) write your service name instead
 celery_app.conf.result_backend = 'rpc://'
 celery_app.conf.accept_content = ['json']
 celery_app.conf.result_expires = timedelta(days=1)
